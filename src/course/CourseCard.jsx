@@ -1,8 +1,12 @@
 import '../App.css'
 
 export default function Card(){
+  const theme = {
+    background : 'blue',
+    color: 'black',
+  }
   return(
-    <article class="course">
+    <article class="course" style={theme}>
     <img class="course__img" src="./public/htmlcss.png" alt="" />
     <div class="course__body">
       <div class="course__title">입문자를 위한, HTML&CSS 웹 개발 입문</div>
