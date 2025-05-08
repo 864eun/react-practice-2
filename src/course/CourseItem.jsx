@@ -1,20 +1,24 @@
-function LinkIcon({ link }) {
-  return (
-    <a className="btn" href={link} target="_blank" rel="noreferrrer">
-      <img className="btn__img" src="/img/link-icon.svg" alt=""></img>
-    </a>
-  );
-}
-export default function CourseItem({
-  title,
-  description,
-  thumbnail,
-  isFavorite,
-  link,
-}) {
-  let heartIconSate =
-    isFavorite === true ? "/img/heart-icon.svg" : "/img/heart-fill-icon.svg";
+function HeartIconBtn({ onClick, isFavorite = false }) {
 
+  return (
+    <button className="btn" onClick={onClick}>
+      <img className="btn__img" src={isFavorite ? '/img/heart-fill-icon.svg' : '/img/heart-icon.svg'} />
+    </button>
+  )
+}
+
+function LinkIconBtn({ link }) {
+  return (
+    <a className="btn" href={link} target="_blank" rel="noreferrer">
+      <img className="btn__img" src="/img/link-icon.svg" />
+    </a>
+  )
+}
+
+export default function CourseItem({ title, description, thumbnail, isFavorite, link }) {
+  function handleFavorite() {
+    alert(isFavorite ? '좋아요' : '모르겠어요.');
+  }
   return (
     <article className="course">
       <img className="course__img" src={thumbnail} alt="강의 이미지" />
@@ -23,10 +27,8 @@ export default function CourseItem({
         <div className="course__description">{description}</div>
       </div>
       <div className="course__icons">
-        <button className="btn">
-          <img className="btn__img" src={heartIconSate} />
-        </button>
-        {link && <LinkIcon link={link} />}
+        <HeartIconBtn isFavorite={isFavorite} onClick={handleFavorite} />
+        {link && <LinkIconBtn link={link} />}
       </div>
     </article>
   );
