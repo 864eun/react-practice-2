@@ -1,5 +1,6 @@
 import './App.css'
 import CourseListCard from './course/CourseListCard'
+import CourseForm from './course/CourseForm'
 
 function App() {
   const items =[
@@ -30,8 +31,9 @@ function App() {
   const favoriteItem = items.filter((item)=>(item.isFavorite))
   return (
     <main style={{flexDirection:'column', gap:'1rem' }}>
+      <CourseForm/>
       <CourseListCard title="강의목록" items={items}/>
-      <CourseListCard title="관심강의" items={favoriteItem}/>
+      {/* <CourseListCard title="관심강의" items={favoriteItem}/> */}
     </main>
   )
 }
