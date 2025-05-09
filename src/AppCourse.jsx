@@ -1,4 +1,4 @@
-import './App.css'
+import './AppCourse.css'
 import CourseListCard from './course/CourseListCard'
 import CourseForm from './course/CourseForm'
 
