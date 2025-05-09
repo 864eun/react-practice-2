@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useState } from "react"
 
-export default function Counter({ontotal}){
-  const [counter, setCounter] = useState(1);
+export default function Counter({ onTotal }) {
+  const [counter, setCounter] = useState(0);
 
-  const handleCount = ()=>{
-    setCounter(counter+1);
-    ontotal();
+  console.log('[렌더링] Counter: ', counter);
+
+  const handleCounter = () => {
+    setCounter((prevCounter) => prevCounter + 1); // 0 + 1
+    setCounter((prevCounter) => prevCounter + 1); // 1 + 1
+    setCounter((prevCounter) => prevCounter + 1); // 2 + 1
+    console.log('[함수호출] Counter: ', counter);
+
+    if (onTotal) {
+      onTotal();
+    }
   }
-  return(
-    <button onClick={handleCount}>Counter : {counter}</button>
+  return (
+    <button onClick={handleCounter}>Counter: {counter}</button>
   )
-};
-
+}
