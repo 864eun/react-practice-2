@@ -1,58 +1,59 @@
-import { useState } from 'react';
-import './App.css'
-import TodoList from './components/todo/TodoList';
+import { useReducer, useState } from "react";
+import "./App.css";
+import TodoList from "./components/todo/TodoList";
+import todoReducer from "./reducer/todoReducer";
 
 function AppTodo(props) {
-  const [todoText, setTodoText] = useState('');
-  const [todos, setTodos] = useState([
-    {id: 0, text: "HTML&CSS 공부하기", done: false },
-    {id: 1, text: "자바스크립트 공부하기", done: false },
+  const [todos, dispatch] = useReducer(todoReducer, [
+    { id: 0, text: "HTML&CSS 공부하기", done: false },
+    { id: 1, text: "자바스크립트 공부하기", done: false },
   ]);
+  const [todoText, setTodoText] = useState("");
   const [insertAt, setInsertAt] = useState(todos.length - 1);
 
   const handleTodoTextChange = (e) => {
     setTodoText(e.target.value);
-  }
+  };
+
+  //added
   const handleAddTodo = (e) => {
-    const nextId = todos.length;
-    setTodos([
-      ...todos,
-      { id: nextId, text: todoText, done: false }
-    ]);
-    setTodoText(''); // null, undefined [X]
-  }
+    dispatch({
+      value: "added",
+      nextId: todos.length,
+      todoText,
+    });
+    setTodoText(""); // null, undefined [X]
+  };
+
+  //added-index
   const handleAddTodoByIndex = () => {
-    const nextId = todos.length;
-    const newTodos = [
-      // 삽입 지점 이전 항목
-      ...todos.slice(0, insertAt),
-      // 새 항목
-      { id: nextId, text: todoText, done: false },
-      // 삽입 지점 이후 항목
-      ...todos.slice(insertAt)
-    ];
-    setTodos(newTodos);
-    setName('');
-  }
+    dispatch({
+      value: "added-index",
+      nextId: todos.length,
+      todoText,
+      insertAt,
+    });
+  };
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleAddTodo();
     }
-  }
-  const handleDeleteTodo = (deleteId) => {
-    const newTodos = todos.filter(item => item.id !== deleteId)
-    setTodos(newTodos);
-  }
+  };
 
+  //deleted
+  const handleDeleteTodo = (deleteId) => {
+    dispatch({
+      deleteId,
+    });
+  };
+
+  //done
   const handleToggleTodo = (id, done) => {
-    const nextTodos = todos.map(item => {
-      if (item.id === id) {
-        return { ...item, done };
-      }
-      return item;
-    })
-    setTodos(nextTodos);
-  }
+    dispatch({
+      id: id,
+      done: done,
+    });
+  };
 
   // const handleToggleCopyTodo = (id, done) => {
   //   const nextTodos = [...copyTodos];
@@ -60,7 +61,7 @@ function AppTodo(props) {
   //   targetItem.done = done;
   //   setCopyTodos(nextTodos);
   // }
-  
+
   return (
     <div>
       <h2>할일목록</h2>
