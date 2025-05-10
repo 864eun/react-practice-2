@@ -1,16 +1,18 @@
-import Card from "../components/Card.jsx";
-import CourseItem from "./CourseItem";
-import { Fragment } from "react";
+import { Fragment } from 'react';
+import CourseItem from './CourseItem';
+import Card from '../components/Card'
 
-function CourseListCard({ title, items }) {
-  const lastIndex = items.length - 1
+function CourseListCard({ title, items, onFavorite }) {
+
+  const lastIndex = items.length - 1;
+
   return (
     <Card title={title}>
-      <div className="courses">
+      <div className='courses'>
         {items.map((item, index) => (
-          <Fragment key={item.key}>
-            <CourseItem {...item} />
-            {index != lastIndex && <hr className="divider" />}
+          <Fragment key={item.id}>
+            <CourseItem {...item} onFavorite={onFavorite} />
+            {index !== lastIndex && <hr className="divider" />}
           </Fragment>
         ))}
       </div>

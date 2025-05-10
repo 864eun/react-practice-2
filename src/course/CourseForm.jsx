@@ -1,5 +1,5 @@
 import { useImmer } from 'use-immer';
-import Card from '../Card';
+import Card from '../components/Card';
 
 export default function CourseForm() {
   const [form, updateForm] = useImmer({
