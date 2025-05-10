@@ -1,33 +1,95 @@
-import { useState } from "react";
-import ToDoList from "./components/todo/ToDoList";
-export default function AppToDo() {
-  const [todotext,setTodotext] = useState("");
-  const [todos, Settodos] = useState([
-    { id: 0, label: "scc" },
-    { id: 1, label: "next" },
-  ]);
+import { useState } from 'react';
+import './App.css'
+import TodoList from './components/todo/TodoList';
 
-  const handleInputChange=(e)=>{
-    setTodotext(e.target.value);
+function AppTodo(props) {
+  const [todoText, setTodoText] = useState('');
+  const [todos, setTodos] = useState([
+    {id: 0, text: "HTML&CSS 공부하기", done: false },
+    {id: 1, text: "자바스크립트 공부하기", done: false },
+  ]);
+  const [insertAt, setInsertAt] = useState(todos.length - 1);
+
+  const handleTodoTextChange = (e) => {
+    setTodoText(e.target.value);
+  }
+  const handleAddTodo = (e) => {
+    const nextId = todos.length;
+    setTodos([
+      ...todos,
+      { id: nextId, text: todoText, done: false }
+    ]);
+    setTodoText(''); // null, undefined [X]
+  }
+  const handleAddTodoByIndex = () => {
+    const nextId = todos.length;
+    const newTodos = [
+      // 삽입 지점 이전 항목
+      ...todos.slice(0, insertAt),
+      // 새 항목
+      { id: nextId, text: todoText, done: false },
+      // 삽입 지점 이후 항목
+      ...todos.slice(insertAt)
+    ];
+    setTodos(newTodos);
+    setName('');
+  }
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleAddTodo();
+    }
+  }
+  const handleDeleteTodo = (deleteId) => {
+    const newTodos = todos.filter(item => item.id !== deleteId)
+    setTodos(newTodos);
   }
 
-  const handleClick = () => {
-    const todosLength = todos.length;
-    Settodos([ ...todos,
-      {id: todosLength,
-      label : todotext}
-  ]);
-  setTodotext(' ')
-  };
+  const handleToggleTodo = (id, done) => {
+    const nextTodos = todos.map(item => {
+      if (item.id === id) {
+        return { ...item, done };
+      }
+      return item;
+    })
+    setTodos(nextTodos);
+  }
 
-
-
+  // const handleToggleCopyTodo = (id, done) => {
+  //   const nextTodos = [...copyTodos];
+  //   const targetItem = nextTodos.find(item => item.id === id);
+  //   targetItem.done = done;
+  //   setCopyTodos(nextTodos);
+  // }
+  
   return (
     <div>
-      <h2>할일 목록</h2>
-      <input value={todotext} onChange={handleInputChange} type="text" ></input>
-      <button onClick={handleClick}>추가</button>
-      <ToDoList todos={todos} />
+      <h2>할일목록</h2>
+      <div>
+        <input
+          type="text"
+          value={todoText}
+          onChange={handleTodoTextChange}
+          onKeyDown={handleKeyDown}
+        />
+        <button onClick={handleAddTodo}>추가</button>
+      </div>
+      <div>
+        <select value={insertAt} onChange={(e) => setInsertAt(e.target.value)}>
+          {todos.map((_, index) => (
+            <option value={index}>{index} 번째</option>
+          ))}
+        </select>
+        <button onClick={handleAddTodoByIndex}>{insertAt} 번째 추가</button>
+      </div>
+      <div>Preview: {todoText}</div>
+
+      <TodoList
+        todos={todos}
+        onDeleteTodo={handleDeleteTodo}
+        onToggleTodo={handleToggleTodo}
+      />
     </div>
   );
 }
+
+export default AppTodo;
