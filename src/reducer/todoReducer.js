@@ -1,35 +1,31 @@
 export default function todoReducer(draft, action) {
-  switch (action.value) {
-    case "added": {
+
+  switch(action.type) {
+    case 'added': {
       const { nextId, todoText } = action;
       draft.push({ id: nextId, text: todoText, done: false });
       break;
     }
-
-    case "added-index": {
+    case 'added_index': {
       const { nextId, todoText, insertAt } = action;
-      draft.slite(insertAt, 0, { id: nextId, text: todoText, done: false });
+      draft.splice(insertAt, 0, { id: nextId, text: todoText, done: false });
       break;
     }
-
-    case "deleted": {
+    case 'deleted': {
       const { deleteId } = action;
-      draft.filter((item) => item.id !== deleteId);
-      break;
+      return draft.filter(item => item.id !== deleteId);
     }
-
-    case "done": {
+    case 'done': {
       const { id, done } = action;
       const target = draft.find(item => item.id === id);
       target.done = done;
       break;
     }
-
-    case "reverse": {
+    case 'reverse': {
       return draft.toReversed();
     }
     default: {
-      throw Error("알 수 없는 액션 타입: " + action.type);
+      throw Error('알 수 없는 액션 타입: ' + action.type);
     }
   }
 }
